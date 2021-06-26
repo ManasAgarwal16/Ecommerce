@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
@@ -26,6 +27,11 @@ const OrderScreen = ({ match }) => {
   }
 
   useEffect(() => {
+    const addPaytmScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paytm');
+      console.log(clientId);
+    };
+    addPaytmScript();
     dispatch(getOrderDetails(orderId));
   }, [dispatch, orderId]);
 

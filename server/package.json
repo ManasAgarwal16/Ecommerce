@@ -23,7 +23,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.13",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "paytm-pg-node-sdk": "^1.0.4"
   },
   "devDependencies": {
     "concurrently": "^6.2.0"
