@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
@@ -16,8 +17,10 @@ const ProductEditScreen = ({ match, history }) => {
   const [image, setImage] = useState('');
   const [brand, setBrand] = useState('');
   const [category, setCategory] = useState('');
+
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -50,6 +53,24 @@ const ProductEditScreen = ({ match, history }) => {
     }
   }, [dispatch, history, productId, product, successUpdate]);
 
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    // console.log(file);
+    const data = new FormData();
+    data.append('image', file);
+    data.append('upload_preset', 'shopify16');
+    data.append('cloud_name', 'webdev16');
+
+    try {
+      const image = await axios.post(
+        'https://api.cloudinary.com/v1_1/webdev16/image/upload',
+        data
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -109,6 +130,13 @@ const ProductEditScreen = ({ match, history }) => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
+              <Form.File
+                id='image-file'
+                label='Choose File'
+                custom
+                onChange={uploadFileHandler}
+              ></Form.File>
+              {/* {uploading && <Loader />} */}
             </Form.Group>
 
             <Form.Group controlId='brand'>
