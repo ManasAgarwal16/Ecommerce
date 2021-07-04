@@ -55,22 +55,28 @@ const ProductEditScreen = ({ match, history }) => {
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
-    // console.log(file);
-    const data = new FormData();
-    data.append('image', file);
-    data.append('upload_preset', 'shopify16');
-    data.append('cloud_name', 'webdev16');
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
 
     try {
-      const image = await axios.post(
-        'https://api.cloudinary.com/v1_1/webdev16/image/upload',
-        data
-      );
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/api/upload', formData, config);
       console.log(data);
+
+      setImage(data);
+      setUploading(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setUploading(false);
     }
   };
+
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -136,7 +142,7 @@ const ProductEditScreen = ({ match, history }) => {
                 custom
                 onChange={uploadFileHandler}
               ></Form.File>
-              {/* {uploading && <Loader />} */}
+              {uploading && <Loader />}
             </Form.Group>
 
             <Form.Group controlId='brand'>
